@@ -38,5 +38,4 @@ path "${var.appname}/*" {
   capabilities = ["read","create", "update", "delete", "list"]
 }
 EOT
-
 }
