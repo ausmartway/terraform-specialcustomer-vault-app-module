@@ -10,7 +10,7 @@ locals {
 
 resource "vault_mount" "application-root" {
   path  = var.appname
-  type  = "kv2"
+  type  = "kv-v2"
 }
 
 
@@ -20,7 +20,8 @@ resource "vault_generic_secret" "application-per-env" {
 
     data_json = <<EOT
 {
-  "Description": "Generic KV2 secrets for application $var.appname at enviroment ${local.enviroments[count.index]}"
+  "Description": "Generic KV2 secrets for application ${var.appname} at enviroment ${local.enviroments[count.index]}",
+  "Usage": "You can save your secret into here by vault kv put ${var.appname}/${local.enviroments[count.index]} @secrets.json, where your secrets are saved in secrets.json file"
 }
 EOT
 
