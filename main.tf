@@ -10,7 +10,7 @@ locals {
 
 resource "vault_mount" "application-root" {
   path  = var.appname
-  type  = "kv2"
+  type  = "kv-v2"
 }
 
 
