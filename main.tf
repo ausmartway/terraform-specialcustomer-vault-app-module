@@ -16,7 +16,14 @@ resource "vault_mount" "application-root" {
 
 resource "vault_generic_secret" "application-per-env" {
   count = length(local.enviroments)
-  path = "${var.appname}/${local.enviroments[count.index]}"
+  path = "${vault_mount.application-root.path}/${local.enviroments[count.index]}"
+
+    data_json = <<EOT
+{
+  "Description": "Generic KV2 secrets for application $var.appname at enviroment ${local.enviroments[count.index]}"
+}
+EOT
+
 }
 
 
