@@ -20,7 +20,7 @@ resource "vault_generic_secret" "application-per-env" {
 
     data_json = <<EOT
 {
-  "Description": "Generic KV2 secrets for application $var.appname at enviroment ${local.enviroments[count.index]}"
+  "Description": "Generic KV2 secrets for application ${var.appname} at enviroment ${local.enviroments[count.index]}"
 }
 EOT
 
