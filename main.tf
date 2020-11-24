@@ -9,20 +9,19 @@ locals {
 // }
 
 resource "vault_mount" "application-root" {
-  count = length(local.enviroments)
   path  = var.appname
-  type  = "${var.appname}/${local.enviroments[count.index]}"
-  data_json = <<EOT
-{
-  "Description":   "KV2 secrets for application ${var.appname} in enviroment ${local.enviroments[count.index]}",
-}
-EOT
+  type  = "generic"
 }
 
 
 resource "vault_generic_secret" "application-per-env" {
   count = length(local.enviroments)
-  path = var.appname
+  path = "${var.appname}/${local.enviroments[count.index]}"
+  data_json = <<EOT
+{
+  "Description":   "KV2 secrets for application ${var.appname} in enviroment ${local.enviroments[count.index]}",
+}
+EOT
 }
 
 resource "vault_policy" "admin" {
