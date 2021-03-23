@@ -14,6 +14,11 @@ resource "vault_mount" "application-root" {
 }
 
 
+resource "vault_mount" "application-root-per-env" {
+  path  = "${var.appname}/${local.enviroments[count.index]}"
+  type  = "kv-v2"
+}
+
 resource "vault_generic_secret" "application-per-env" {
   count = length(local.enviroments)
   path = "${vault_mount.application-root.path}/${local.enviroments[count.index]}"
@@ -34,7 +39,7 @@ resource "vault_policy" "admin" {
   name  = "${var.appname}-${local.enviroments[count.index]}-admin"
 
   policy = <<EOT
-path "${var.appname}/data/${local.enviroments[count.index]}/*" {
+path "${var.appname}/${local.enviroments[count.index]}/*" {
   capabilities = ["create", "update", "delete", "list"]
 }
 EOT
@@ -45,9 +50,11 @@ resource "vault_policy" "consumer" {
   name  = "${var.appname}-${local.enviroments[count.index]}-consumer"
 
   policy = <<EOT
-path "${var.appname}/data/${local.enviroments[count.index]}/*" {
-  capabilities = ["read"]
+path "${var.appname}/${local.enviroments[count.index]}/*" {
+  capabilities = ["read","list"]
 }
+
+
 EOT
 }
 
