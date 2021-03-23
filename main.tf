@@ -22,7 +22,7 @@ resource "vault_mount" "application-root-per-env" {
 
 resource "vault_generic_secret" "application-per-env" {
   count = length(local.enviroments)
-  path = "${vault_mount.application-root.path}/${local.enviroments[count.index]}"
+  path = "${vault_mount.application-root-per-env[count.index].path}"
 
     data_json = <<EOT
 {
