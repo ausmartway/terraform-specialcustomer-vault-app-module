@@ -20,18 +20,18 @@ resource "vault_mount" "application-root-per-env" {
   type  = "kv-v2"
 }
 
-resource "vault_generic_secret" "application-per-env" {
-  count = length(local.enviroments)
-  path = "${vault_mount.application-root-per-env[count.index].path}"
+# resource "vault_generic_secret" "application-per-env" {
+#   count = length(local.enviroments)
+#   path = "${vault_mount.application-root-per-env[count.index].path}"
 
-    data_json = <<EOT
-{
-  "Description": "Generic KV2 secrets for application ${var.appname} at enviroment ${local.enviroments[count.index]}",
-  "Usage": "You can save your secret into here by vault kv put ${var.appname}/${local.enviroments[count.index]} @secrets.json, where your secrets are saved in secrets.json file"
-}
-EOT
+#     data_json = <<EOT
+# {
+#   "Description": "Generic KV2 secrets for application ${var.appname} at enviroment ${local.enviroments[count.index]}",
+#   "Usage": "You can save your secret into here by vault kv put ${var.appname}/${local.enviroments[count.index]} @secrets.json, where your secrets are saved in secrets.json file"
+# }
+# EOT
 
-}
+# }
 
 
 
