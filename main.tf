@@ -34,7 +34,7 @@ resource "vault_policy" "admin" {
   name  = "${var.appname}-${local.enviroments[count.index]}-admin"
 
   policy = <<EOT
-path "${var.appname}/${local.enviroments[count.index]}/*" {
+path "${var.appname}/data/${local.enviroments[count.index]}/*" {
   capabilities = ["create", "update", "delete", "list"]
 }
 EOT
@@ -45,7 +45,7 @@ resource "vault_policy" "consumer" {
   name  = "${var.appname}-${local.enviroments[count.index]}-consumer"
 
   policy = <<EOT
-path "${var.appname}/${local.enviroments[count.index]}/*" {
+path "${var.appname}/data/${local.enviroments[count.index]}/*" {
   capabilities = ["read"]
 }
 EOT
