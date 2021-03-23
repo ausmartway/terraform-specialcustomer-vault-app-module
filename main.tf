@@ -8,13 +8,14 @@ locals {
 //   type  = "generic"
 // }
 
-resource "vault_mount" "application-root" {
-  path  = var.appname
-  type  = "kv-v2"
-}
+# resource "vault_mount" "application-root" {
+#   path  = var.appname
+#   type  = "kv-v2"
+# }
 
 
 resource "vault_mount" "application-root-per-env" {
+  count = length(local.enviroments)
   path  = "${var.appname}/${local.enviroments[count.index]}"
   type  = "kv-v2"
 }
