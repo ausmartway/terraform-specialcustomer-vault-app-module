@@ -1,6 +1,6 @@
-locals {
-  enviroments = ["Prod", "Staging", "Test", "Dev"]
-}
+// locals {
+//   enviroments = ["Prod", "Staging", "Test", "Dev"]
+// }
 
 // resource "vault_mount" "application-per-enviroments" {
 //   count = length(local.enviroments)
@@ -15,8 +15,8 @@ locals {
 
 
 resource "vault_mount" "application-root-per-env" {
-  count = length(local.enviroments)
-  path  = "${var.appname}/${local.enviroments[count.index]}"
+  count = length(var.enviroments)
+  path  = "${var.appname}/${var.enviroments[count.index]}"
   type  = "kv-v2"
 }
 
@@ -36,22 +36,22 @@ resource "vault_mount" "application-root-per-env" {
 
 
 resource "vault_policy" "admin" {
-  count = length(local.enviroments)
-  name  = "${var.appname}-${local.enviroments[count.index]}-admin"
+  count = length(var.enviroments)
+  name  = "${var.appname}-${var.enviroments[count.index]}-admin"
 
   policy = <<EOT
-path "${var.appname}/${local.enviroments[count.index]}/*" {
+path "${var.appname}/${var.enviroments[count.index]}/*" {
   capabilities = ["create", "update", "delete", "list"]
 }
 EOT
 }
 
 resource "vault_policy" "consumer" {
-  count = length(local.enviroments)
-  name  = "${var.appname}-${local.enviroments[count.index]}-consumer"
+  count = length(var.enviroments)
+  name  = "${var.appname}-${var.enviroments[count.index]}-consumer"
 
   policy = <<EOT
-path "${var.appname}/${local.enviroments[count.index]}/*" {
+path "${var.appname}/${var.enviroments[count.index]}/*" {
   capabilities = ["read","list"]
 }
 
