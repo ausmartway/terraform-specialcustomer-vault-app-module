@@ -1,43 +1,14 @@
-// locals {
-//   enviroments = ["Prod", "Staging", "Test", "Dev"]
-// }
-
-// resource "vault_mount" "application-per-enviroments" {
-//   count = length(local.enviroments)
-//   path  = "${var.appname}/${local.enviroments[count.index]}"
-//   type  = "generic"
-// }
-
-# resource "vault_mount" "application-root" {
-#   path  = var.appname
-#   type  = "kv-v2"
-# }
-
-
+//create mount point for the application per enviroment.
 resource "vault_mount" "application-root-per-env" {
   count = length(var.enviroments)
   path  = "${var.appname}/${var.enviroments[count.index]}"
   type  = "kv-v2"
 }
 
-# resource "vault_generic_secret" "application-per-env" {
-#   count = length(local.enviroments)
-#   path = "${vault_mount.application-root-per-env[count.index].path}"
-
-#     data_json = <<EOT
-# {
-#   "Description": "Generic KV2 secrets for application ${var.appname} at enviroment ${local.enviroments[count.index]}",
-#   "Usage": "You can save your secret into here by vault kv put ${var.appname}/${local.enviroments[count.index]} @secrets.json, where your secrets are saved in secrets.json file"
-# }
-# EOT
-
-# }
-
-
-
-resource "vault_policy" "admin" {
+//create a policy that allows create/update/delete/list of secret for the application per enviroment. identity with this policy can create/delete/update the secrets but can't read.
+resource "vault_policy" "secretprovider" {
   count = length(var.enviroments)
-  name  = "${var.appname}-${var.enviroments[count.index]}-admin"
+  name  = "${var.appname}-${var.enviroments[count.index]}-secret-provider"
 
   policy = <<EOT
 path "${var.appname}/${var.enviroments[count.index]}/*" {
@@ -46,9 +17,10 @@ path "${var.appname}/${var.enviroments[count.index]}/*" {
 EOT
 }
 
+//create a policy that allows read of secret for the application per enviroment. identities with this policy can read the secrets but can't write.
 resource "vault_policy" "consumer" {
   count = length(var.enviroments)
-  name  = "${var.appname}-${var.enviroments[count.index]}-consumer"
+  name  = "${var.appname}-${var.enviroments[count.index]}-secret-consumer"
 
   policy = <<EOT
 path "${var.appname}/${var.enviroments[count.index]}/*" {
@@ -59,8 +31,9 @@ path "${var.appname}/${var.enviroments[count.index]}/*" {
 EOT
 }
 
-resource "vault_policy" "superadmin" {
-  name = "${var.appname}-superadmin"
+//create a policy that allows both read/write permission for the application per enviroment. 
+resource "vault_policy" "admin" {
+  name = "${var.appname}-admin"
 
   policy = <<EOT
 path "${var.appname}/*" {
