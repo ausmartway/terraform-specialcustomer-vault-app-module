@@ -18,7 +18,7 @@ EOT
 }
 
 //create a policy that allows read of secret for the application per enviroment. identities with this policy can read the secrets but can't write.
-resource "vault_policy" "consumer" {
+resource "vault_policy" "secretconsumer" {
   count = length(var.enviroments)
   name  = "${var.appname}-${var.enviroments[count.index]}-secret-consumer"
 
@@ -32,8 +32,9 @@ EOT
 }
 
 //create a policy that allows both read/write permission for the application per enviroment. 
-resource "vault_policy" "admin" {
-  name = "${var.appname}-admin"
+resource "vault_policy" "secretadmin" {
+  count = length(var.enviroments)
+  name  = "${var.appname}-${var.enviroments[count.index]}-secretadmin"
 
   policy = <<EOT
 path "${var.appname}/*" {

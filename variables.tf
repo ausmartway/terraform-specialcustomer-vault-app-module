@@ -4,5 +4,5 @@ variable "appname" {
 
 variable "enviroments" {
   description = "list of enviroments"
-  default = ["prod","dev"]
+  default     = ["prod", "dev"]
 }
