@@ -1,3 +1,13 @@
-# terraform-specialcustomer-vault-app-module
-A module that can onboard an Application with a list of environment associated.
+# terraform-vault-kv-for-application
+Terraform module that creates kv2 secrets engine for application per enviroment, along with secrets provider/consumer/admin policies.
 
+
+##Usage
+```terraform
+module "vault_app_module_APP000001" {
+    source  = "ausmartway/terraform-vault-kv-for-application"
+    version = "0.3.0"
+    appname = "APP000001"
+    enviroments=["production","dev","test","sit","svt"]
+}
+```
