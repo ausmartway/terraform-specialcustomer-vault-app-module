@@ -6,7 +6,7 @@ Terraform module that creates kv2 secrets engine for application per enviroment,
 ```terraform
 module "vault_app_module_APP000001" {
     source  = "ausmartway/terraform-vault-kv-for-application"
-    version = "0.3.0"
+    version = "0.4.0"
     appname = "APP000001"
     enviroments=["production","dev","test","sit","svt"]
 }

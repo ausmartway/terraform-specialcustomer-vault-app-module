@@ -12,3 +12,10 @@ variable approle_path {
   default     = "approle"
   description = "The path of AppRole auth backend, eg, approle"
 }
+
+variable enable_approle {
+  type        = bool
+  default     = true
+  description = "If approle roles should be enabled for the application"
+}
+
